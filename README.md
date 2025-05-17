@@ -8,7 +8,7 @@ This is a fork of [informagi/REL](github.com/informagi/REL) that fixes a bunch o
 git clone https://github.com/WearableComputerLab/REL.git
 cd REL
 docker build -t rel .
-mkdir data
+mkdir --mode=777 data
 docker run --rm -it -p 127.0.0.1:5555:5555 -v $PWD/data:/home/rel/data rel
 ```
 

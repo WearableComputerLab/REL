@@ -3,7 +3,7 @@ from functools import lru_cache
 from time import time
 
 import numpy as np
-from gensim import utils
+#from gensim import utils
 from numpy import float32 as REAL
 from numpy import zeros
 
@@ -56,9 +56,10 @@ class GenericLookup(DB):
         start = time()
 
         # Loop over file.
-        with utils.open(file_name, "rb") as fin:
+        with open(file_name, "rb") as fin:
             # Determine size file.
-            header = utils.to_unicode(fin.readline(), encoding="utf-8")
+            #header = utils.to_unicode(fin.readline(), encoding="utf-8")
+            header = fin.readline().decode("utf-8")
             vocab_size, vector_size = (
                 int(x) for x in header.split()
             )  # throws for invalid file format
@@ -72,8 +73,12 @@ class GenericLookup(DB):
                         "unexpected end of input; is count incorrect or file otherwise damaged?"
                     )
 
-                parts = utils.to_unicode(
-                    line.rstrip(), encoding="utf-8", errors="strict"
+                #parts = utils.to_unicode(
+                #    line.rstrip(), encoding="utf-8", errors="strict"
+                #).split(" ")
+
+                parts = line.rstrip().decode(
+                    encoding="utf-8", errors="strict"
                 ).split(" ")
 
                 if len(parts) != vector_size + 1:

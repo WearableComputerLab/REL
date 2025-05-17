@@ -32,11 +32,14 @@ class EntityDisambiguation:
     for the ED step.
     """
 
-    def __init__(self, base_url, wiki_version, user_config, reset_embeddings=False):
+    def __init__(self, base_url, wiki_version, user_config, reset_embeddings=False, init_only=False):
         self.base_url = base_url
         self.wiki_version = wiki_version
         self.embeddings = {}
         self.config = self.__get_config(user_config)
+
+        if init_only:
+            return
 
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.prerank_model = None

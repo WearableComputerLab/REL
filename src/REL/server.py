@@ -259,10 +259,11 @@ if __name__ == "__main__":
     p.add_argument("--ner-model", default="ner-fast", nargs="+")
     p.add_argument("--bind", "-b", metavar="ADDRESS", default="0.0.0.0")
     p.add_argument("--port", "-p", default=5555, type=int)
+    p.add_argument("--init", action="store_true")
     args = p.parse_args()
 
     if not DEBUG:
-        from REL.crel.conv_el import ConvEL
+        #from REL.crel.conv_el import ConvEL
         from REL.entity_disambiguation import EntityDisambiguation
         from REL.ner import load_flair_ner
 
@@ -270,6 +271,7 @@ if __name__ == "__main__":
             args.base_url,
             args.wiki_version,
             {"mode": "eval", "model_path": args.ed_model},
+            init_only=args.init
         )
 
         handlers = {}
@@ -277,13 +279,19 @@ if __name__ == "__main__":
         for ner_model_name in args.ner_model:
             print("Loading NER model:", ner_model_name)
             ner_model = load_flair_ner(ner_model_name)
+            if args.init:
+                continue
+
             handler = ResponseHandler(
                 args.base_url, args.wiki_version, ed_model, ner_model
             )
             handlers[ner_model_name] = handler
 
+        if args.init:
+            exit(0)
+
         conv_handlers = {
-            "default": ConvEL(args.base_url, args.wiki_version, ed_model=ed_model)
+            #"default": ConvEL(args.base_url, args.wiki_version, ed_model=ed_model)
         }
 
     uvicorn.run(app, port=args.port, host=args.bind)

@@ -39,6 +39,7 @@ class FullyConnectedLayer(Module):
 class S2E(BertPreTrainedModel):
     def __init__(self, config, args):
         super().__init__(config)
+        config.position_embedding_type = "absolute"
         self.max_span_length = args.max_span_length
         self.top_lambda = args.top_lambda
         self.ffnn_size = args.ffnn_size
